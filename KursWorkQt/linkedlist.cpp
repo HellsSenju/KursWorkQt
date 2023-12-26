@@ -84,6 +84,19 @@ void LinkedList::print()
     qDebug() << "";
 }
 
+void LinkedList::clear()
+{
+    if(isEmpty())
+        return;
+
+    Node* current = first;
+    while(current){
+        Node* temp = current->next;
+        delete [] current;
+        current = temp;
+    }
+}
+
 bool LinkedList::isEmpty()
 {
     return first == nullptr;

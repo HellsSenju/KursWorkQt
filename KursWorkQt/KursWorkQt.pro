@@ -1,8 +1,9 @@
-QT       += core gui
+QT       += core gui charts printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
+QT_QPA_PLATFORM= wayland
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -10,14 +11,23 @@ CONFIG += c++11
 
 SOURCES += \
     arraylist.cpp \
+    deque.cpp \
+    dequelist.cpp \
+    doublelinkedlist.cpp \
     linkedlist.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
+    Node.h \
     arraylist.h \
+    deque.h \
+    dequelist.h \
+    doublelinkedlist.h \
     linkedlist.h \
-    mainwindow.h
+    mainwindow.h \
+    qcustomplot.h
 
 FORMS += \
     mainwindow.ui

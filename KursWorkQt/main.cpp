@@ -1,6 +1,11 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QtWidgets>
+#include <QtCharts>
+#include <QGraphicsWidget>
+#include <QGraphicsView>
+
 
 int main(int argc, char *argv[])
 {

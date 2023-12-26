@@ -1,26 +1,24 @@
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H
+#ifndef DOUBLELINKEDLIST_H
+#define DOUBLELINKEDLIST_H
 
 #include <QDebug>
 #include "Node.h"
 
-class LinkedList
+class DoubleLinkedList
 {
 public:
-    LinkedList();
+    DoubleLinkedList();
+
     void pushBack(int d);
     void pushFront(int d);
     void removeFirst();
     void removeLast();
     Node* contains(int d);
     void print();
-    void clear();
 
 private:
-    Node *first;
-    Node *last;
-
+    Node *head, *tail;
     bool isEmpty();
 };
 
-#endif // LINKEDLIST_H
+#endif // DOUBLELINKEDLIST_H

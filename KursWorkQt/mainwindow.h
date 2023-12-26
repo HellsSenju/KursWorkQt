@@ -3,7 +3,16 @@
 
 #include "linkedlist.h"
 #include "arraylist.h"
+#include "doublelinkedlist.h"
+#include "dequelist.h"
+
 #include <QMainWindow>
+#include <QElapsedTimer>
+#include <QtCharts>
+#include <QRgb>
+#include <QPainter>
+#include <QLineSeries>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -19,5 +28,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    template<class T>
+    void test();
 };
 #endif // MAINWINDOW_H
