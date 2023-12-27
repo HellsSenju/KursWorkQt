@@ -16,8 +16,7 @@ SOURCES += \
     doublelinkedlist.cpp \
     linkedlist.cpp \
     main.cpp \
-    mainwindow.cpp \
-    qcustomplot.cpp
+    mainwindow.cpp
 
 HEADERS += \
     Node.h \
@@ -26,8 +25,7 @@ HEADERS += \
     dequelist.h \
     doublelinkedlist.h \
     linkedlist.h \
-    mainwindow.h \
-    qcustomplot.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui

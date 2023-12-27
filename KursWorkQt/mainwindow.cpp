@@ -14,20 +14,49 @@ MainWindow::MainWindow(QWidget *parent)
     DoubleLinkedList doubleLinkedList;
     DequeList dequeList;
 
+    QFont fontAxisX;
+    fontAxisX.setPixelSize(8);
+    QFont fontAxisY;
+    fontAxisY.setPixelSize(10);
+
     QFont fontLabels;
-    fontLabels.setPixelSize(8);
+    fontLabels.setPixelSize(9);
+
+    QCategoryAxis *aX = new QCategoryAxis();
+    aX->setRange(0, 110000);
+    aX->setTitleText("Количество итераций");
+    aX->setLabelsAngle(90);
+    aX->setLabelsFont(fontAxisX);
+    aX->setLabelsPosition(QCategoryAxis::AxisLabelsPositionOnValue);
+    aX->append("0", 0);
+    aX->append("10000", 10000);
+    aX->append("50000", 50000);
+    aX->append("100000", 100000);
+
+    QCategoryAxis *aY = new QCategoryAxis();
+    aY->setRange(0, 6000);
+    aY->setTitleText("Микросекунды (мкс)");
+    aY->setLabelsFont(fontAxisY);
+    aY->setLabelsPosition(QCategoryAxis::AxisLabelsPositionOnValue);
+    aY->append("0", 0);
+
 
     QValueAxis  *axisX = new QValueAxis();
     axisX->setRange(0, 110000);
-    axisX->setTitleText("x");
+    axisX->setTitleText("Количество итераций");
     axisX->setTickCount(12);
+//    axisX->setMinorTickCount(5);
     axisX->setLabelsAngle(90);
-    axisX->setLabelsFont(fontLabels);
-    axisX->setMinorGridLineVisible(true);
+    axisX->setLabelsFont(fontAxisX);
+
+
 
     QValueAxis  *axisY = new QValueAxis();
     axisY->setRange(0, 6000);
-    axisY->setTitleText("y");
+    axisY->setTitleText("Микросекунды (мкс)");
+    axisY->setTickCount(31);
+//    axisY->setMinorTickCount();
+    axisY->setLabelsFont(fontAxisY);
 
 
     QLineSeries *series = new QLineSeries();
@@ -40,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     series->append(0,0);
     series->setName("LinkedList");
 
+
     // 10000
     timer.start();
     for(int i = 0; i < 10000; i++){
@@ -47,8 +77,11 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     int time = timer.nsecsElapsed() / 1000;
+    aY->append(QString::number(time), time);
     series->append(10000, time);
     linkedList.clear();
+    //
+
 
     // 50000
     timer.restart();
@@ -57,8 +90,11 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     time = timer.nsecsElapsed() / 1000;
+    aY->append(QString::number(time), time);
     series->append(50000, time);
     linkedList.clear();
+    //
+
 
     // 100000
     timer.restart();
@@ -67,11 +103,12 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     time = timer.nsecsElapsed() / 1000;
+    aY->append(QString::number(time), time);
     series->append(100000, time);
     linkedList.clear();
+    //
 
     QChart *chart = new QChart();
-//    chart->legend()->paint();
     chart->addSeries(series);
     chart->legend()->setAlignment(Qt::AlignBottom);
 
@@ -88,30 +125,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     chart->setAnimationOptions(QChart::AllAnimations);
 //    chart->createDefaultAxes();
-    chart->addAxis(axisX, Qt::AlignBottom);
-    chart->addAxis(axisY, Qt::AlignLeft);
-    series->attachAxis(axisX);
-    series->attachAxis(axisY);
-
-//    QCategoryAxis *axisX = new QCategoryAxis();
-//    axisX->setTitleText("Количество элементов");
-//    axisX->setTickCount(4);
-//    axisX->append("q 1000", 1000);
-//    axisX->append("q 10000", 10000);
-//    axisX->append("q 50000", 50000);
-//    axisX->append("q 100000", 100000);
-//    axisX->setRange(0, 10000);
-
-
-//    chart->setAxisX(axisX, series);
-//    chart->addAxis(axisX, Qt::AlignBottom);
-//    chart->addAxis(axisY, Qt::AlignLeft);
-
-//    chart->axes(Qt::);
-
-
-//    series->attachAxis(axisX);
-//    series->attachAxis(axisY);
+    chart->addAxis(aX, Qt::AlignBottom);
+    chart->addAxis(aY, Qt::AlignLeft);
+    series->attachAxis(aX);
+    series->attachAxis(aY);
 
     ui->chartView->setChart(chart);
     ui->chartView->setRenderHint(QPainter::Antialiasing);
