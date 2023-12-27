@@ -89,6 +89,19 @@ void DoubleLinkedList::print()
     qDebug() << "";
 }
 
+void DoubleLinkedList::clear()
+{
+    if(isEmpty())
+        return;
+
+    Node* current = head;
+    while(current){
+        Node* temp = current->next;
+        delete [] current;
+        current = temp;
+    }
+}
+
 bool DoubleLinkedList::isEmpty()
 {
     return head == nullptr && tail == nullptr;

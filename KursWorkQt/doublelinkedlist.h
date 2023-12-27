@@ -15,6 +15,7 @@ public:
     void removeLast();
     Node* contains(int d);
     void print();
+    void clear();
 
 private:
     Node *head, *tail;

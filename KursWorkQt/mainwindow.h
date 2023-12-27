@@ -5,6 +5,7 @@
 #include "arraylist.h"
 #include "doublelinkedlist.h"
 #include "dequelist.h"
+#include "form.h"
 
 #include <QMainWindow>
 #include <QElapsedTimer>
@@ -32,6 +33,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     QChart *chart;
@@ -44,7 +50,10 @@ private:
     void configure();
     void configureSeries();
     template<typename T>
-    int test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxis *axisY,
+    void test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxis *axisY,
              QLineSeries *series, int maxIter, int colIter);
+
+    template<typename T>
+    QChart* test2(T* list, Method method,  int maxIter, int colIter);
 };
 #endif // MAINWINDOW_H

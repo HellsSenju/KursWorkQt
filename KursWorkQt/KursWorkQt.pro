@@ -14,6 +14,7 @@ SOURCES += \
     deque.cpp \
     dequelist.cpp \
     doublelinkedlist.cpp \
+    form.cpp \
     linkedlist.cpp \
     main.cpp \
     mainwindow.cpp
@@ -24,10 +25,12 @@ HEADERS += \
     deque.h \
     dequelist.h \
     doublelinkedlist.h \
+    form.h \
     linkedlist.h \
     mainwindow.h
 
 FORMS += \
+    form.ui \
     mainwindow.ui
 
 # Default rules for deployment.
