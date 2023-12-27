@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Курсовая работа</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../Загрузки/icons8-список-100.png</normaloff>../../../Загрузки/icons8-список-100.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QChartView" name="chartView" native="true">

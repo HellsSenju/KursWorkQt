@@ -12,6 +12,12 @@
 #include <QRgb>
 #include <QPainter>
 #include <QLineSeries>
+#include <QObject>
+#include <QtGlobal>
+#include <cmath>
+
+
+enum class Method {PushBack, PushFront, RemoveFirst, RemoveLast, Contains};
 
 
 QT_BEGIN_NAMESPACE
@@ -28,8 +34,17 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QChart *chart;
 
-    template<class T>
-    void test();
+    QFont fontChartTitle;
+    QFont fontAxisX;
+    QFont fontAxisY;
+    QFont fontPointLabels;
+
+    void configure();
+    void configureSeries();
+    template<typename T>
+    int test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxis *axisY,
+             QLineSeries *series, int maxIter, int colIter);
 };
 #endif // MAINWINDOW_H

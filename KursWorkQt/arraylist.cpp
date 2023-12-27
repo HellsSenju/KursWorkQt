@@ -55,6 +55,11 @@ void ArrayList::print()
     qDebug() << "";
 }
 
+void ArrayList::clear()
+{
+    list_size = 0;
+}
+
 void ArrayList::add(int index, int d)
 {
     if(isNeedToResize())
@@ -87,13 +92,11 @@ bool ArrayList::isNeedToResize()
 
 void ArrayList::resize()
 {
-    int *newArr = new int[arr_size * 2];
-//    int *newArr = new int[(arr_size * 3)/2 + 1];
+    int *newArr = new int[arr_size*arr_size];
 
     for(int i = 0; i < arr_size; i++)
         newArr[i] = data[i];
 
     data = newArr;
-    arr_size *= 2;
-//    arr_size = (arr_size * 3)/2 + 1;
+    arr_size *= arr_size;
 }

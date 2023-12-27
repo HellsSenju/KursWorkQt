@@ -2,6 +2,7 @@
 #define ARRAYLIST_H
 
 #include <QDebug>
+#include <cmath>
 
 class ArrayList
 {
@@ -15,6 +16,7 @@ public:
     void removeLast();
     int contains(int d);
     void print();
+    void clear();
 
 
 private:
