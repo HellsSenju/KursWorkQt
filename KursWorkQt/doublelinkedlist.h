@@ -8,6 +8,7 @@ class DoubleLinkedList
 {
 public:
     DoubleLinkedList();
+//    ~DoubleLinkedList();
 
     void pushBack(int d);
     void pushFront(int d);

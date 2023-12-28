@@ -160,6 +160,13 @@ void Deque::print()
     }
 }
 
+void Deque::clear()
+{
+    count = 0;
+    front = -1;
+    rear = -1;
+}
+
 bool Deque::isFull()
 {
     return count == capacity;

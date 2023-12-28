@@ -2,7 +2,7 @@
 
 ArrayList::ArrayList()
 {
-    arr_size = 10;
+    arr_size = 100;
     list_size = 0;
     data = new int[arr_size];
 }

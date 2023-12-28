@@ -6,7 +6,7 @@
 class Deque
 {
 public:
-    Deque(int capacity = 100);
+    Deque(int capacity = 1000);
     ~Deque();
 
     void insertFront(int data);
@@ -17,6 +17,7 @@ public:
     int getFront();
     int getRear();
     void print();
+    void clear();
 
 private:
     int *arr;

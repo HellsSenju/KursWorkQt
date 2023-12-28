@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>623</width>
-    <height>546</height>
+    <width>1014</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,75 +18,382 @@
     <normaloff>../../../Загрузки/icons8-список-100.png</normaloff>../../../Загрузки/icons8-список-100.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QChartView" name="chartView" native="true">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>151</width>
-      <height>25</height>
+      <width>661</width>
+      <height>721</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Мои 4 реализации</string>
-    </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>680</x>
       <y>10</y>
-      <width>141</width>
-      <height>25</height>
+      <width>321</width>
+      <height>261</height>
      </rect>
     </property>
-    <property name="text">
-     <string>реализации node</string>
+    <property name="title">
+     <string>Настройки</string>
     </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>91</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Операция:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>30</y>
+       <width>211</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>pushBack</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>pushFront</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>deleteBack</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>deleteFront</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>contains</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string/>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>80</y>
+       <width>271</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Максимальное количество итераций:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_maxIter">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>100</y>
+       <width>211</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>100</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>1000</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>10000</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>50000</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>100000</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QComboBox" name="comboBox_colIter">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>160</y>
+       <width>211</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>5</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>4</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>140</y>
+       <width>261</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Количество промежуточных точек:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>200</y>
+       <width>221</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Единица измерения времени</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_ci">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>220</y>
+       <width>211</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>наносекунда</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>микросекунда</string>
+      </property>
+     </item>
+    </widget>
    </widget>
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>50</y>
-      <width>421</width>
-      <height>361</height>
+      <x>680</x>
+      <y>500</y>
+      <width>321</width>
+      <height>101</height>
      </rect>
     </property>
-    <property name="currentIndex">
-     <number>1</number>
+    <property name="title">
+     <string>Дополнительные сравнения:</string>
     </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Tab 1</string>
-     </attribute>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>301</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Все мои 4 реализации</string>
+     </property>
     </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Tab 2</string>
-     </attribute>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>301</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>реализации node</string>
+     </property>
     </widget>
    </widget>
-   <widget class="QChartView" name="chartView" native="true">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>60</y>
-      <width>41</width>
-      <height>311</height>
+      <x>680</x>
+      <y>300</y>
+      <width>321</width>
+      <height>181</height>
      </rect>
     </property>
+    <property name="title">
+     <string>Сравнение Qt с моим:</string>
+    </property>
+    <widget class="QComboBox" name="comboBox_qt">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>40</y>
+       <width>251</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>QList</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>QLinkedList</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>31</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>QT:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>51</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Mine:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_mine">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>90</y>
+       <width>251</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>LinkedList</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>DoubleLinkedList</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>ArrayList</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>DequeList</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QPushButton" name="pushButton_qt_mine">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>301</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>График</string>
+     </property>
+    </widget>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>623</width>
-     <height>22</height>
-    </rect>
-   </property>
   </widget>
  </widget>
  <customwidgets>

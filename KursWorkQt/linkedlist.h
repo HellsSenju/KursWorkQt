@@ -8,6 +8,7 @@ class LinkedList
 {
 public:
     LinkedList();
+//    ~LinkedList();
     void pushBack(int d);
     void pushFront(int d);
     void removeFirst();

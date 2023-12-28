@@ -15,11 +15,11 @@
 #include <QLineSeries>
 #include <QObject>
 #include <QtGlobal>
+#include <QLinkedList>
 #include <cmath>
 
 
-enum class Method {PushBack, PushFront, RemoveFirst, RemoveLast, Contains};
-
+enum class Method {PushBack, PushFront, DeleteFirst, DeleteLast, Contains};
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,22 +38,64 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_pushButton_qt_mine_clicked();
+
+    void on_comboBox_maxIter_currentTextChanged(const QString &arg1);
+
+    void on_comboBox_colIter_currentTextChanged(const QString &arg1);
+
+    void on_comboBox_ci_currentTextChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     QChart *chart;
 
     QFont fontChartTitle;
-    QFont fontAxisX;
-    QFont fontAxisY;
+    QFont fontAxis;
     QFont fontPointLabels;
+    int maxIter;
+    int colIter;
+    int del;
+
+    QMap<QString, Method> methods{
+        {"pushBack", Method::PushBack},
+        {"pushFront", Method::PushFront},
+        {"deleteFirst", Method::DeleteFirst},
+        {"deleteLast", Method::DeleteLast},
+        {"contains", Method::Contains}
+    };
+
+    QMap<QString, int> qt{
+        {"QLinkedList", 0},
+        {"QList", 1}
+    };
+
+    QMap<QString, int> mine{
+        {"LinkedList", 0},
+        {"ArrayList", 1},
+        {"DoubleLinkedList", 2},
+        {"DequeList", 3}
+    };
+
+    QMap<QString, int> ci{
+        {"миллисекунда", 1000000},
+        {"микросекунда", 1000},
+        {"наносекунды", 1},
+    };
 
     void configure();
     void configureSeries();
-    template<typename T>
-    void test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxis *axisY,
-             QLineSeries *series, int maxIter, int colIter);
 
     template<typename T>
-    QChart* test2(T* list, Method method,  int maxIter, int colIter);
+    void test(T* list, Method method, QValueAxis *axisX, QValueAxis *axisY,
+             QLineSeries *series);
+
+    template<typename T>
+    void testQt(T* list, Method method, QValueAxis *axisX, QValueAxis *axisY,
+             QLineSeries *series);
+
+    void setChartProps(QChart *chart, QString name);
+    void setSeriesProps(QLineSeries *series, QString name, QColor color, bool labelsVisible);
+    void setAxisProps(QValueAxis *axis, QString name, int interval, int minorTickCount);
 };
 #endif // MAINWINDOW_H

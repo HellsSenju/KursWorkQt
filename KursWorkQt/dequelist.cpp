@@ -47,3 +47,8 @@ void DequeList::print()
     qDebug() << "========End Of Print DequeList========";
     qDebug() << "";
 }
+
+void DequeList::clear()
+{
+    deque->clear();
+}

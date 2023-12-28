@@ -16,6 +16,7 @@ public:
     void removeLast();
     bool contains(int d);
     void print();
+    void clear();
 
 private:
     Deque *deque;

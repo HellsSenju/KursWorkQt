@@ -90,11 +90,16 @@ void LinkedList::clear()
         return;
 
     Node* current = first;
-    while(current){
-        Node* temp = current->next;
-        delete [] current;
-        current = temp;
+    Node* next = nullptr;
+
+    while (current != nullptr)
+    {
+        next = current->next;
+        free(current);
+        current = next;
     }
+
+    first = nullptr;
 }
 
 bool LinkedList::isEmpty()

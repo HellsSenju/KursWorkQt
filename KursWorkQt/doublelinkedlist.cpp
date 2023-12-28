@@ -95,11 +95,16 @@ void DoubleLinkedList::clear()
         return;
 
     Node* current = head;
-    while(current){
-        Node* temp = current->next;
-        delete [] current;
-        current = temp;
+    Node* next = nullptr;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        free(current);
+        current = next;
     }
+
+    head = nullptr;
 }
 
 bool DoubleLinkedList::isEmpty()

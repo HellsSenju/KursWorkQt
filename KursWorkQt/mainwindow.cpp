@@ -6,95 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     chart = new QChart();
     configure();
-
-    //
-
-    LinkedList linkedList;
-    ArrayList arrayList;
-//    DoubleLinkedList *doubleLinkedList = new DoubleLinkedList();
-//    DequeList *dequeList = new DequeList();
-
-
-/*
-    QValueAxis  *axisX = new QValueAxis();
-    axisX->setRange(0, 110000);
-    axisX->setTitleText("Количество итераций");
-    axisX->setTickCount(12);
-//    axisX->setMinorTickCount(5);
-    axisX->setLabelsAngle(90);
-    axisX->setLabelsFont(fontAxisX);
-
-
-
-    QValueAxis  *axisY = new QValueAxis();
-    axisY->setRange(0, 6000);
-    axisY->setTitleText("Микросекунды (мкс)");
-    axisY->setTickCount(31);
-//    axisY->setMinorTickCount();
-    axisY->setLabelsFont(fontAxisY);
-    */
-
-
-    QCategoryAxis *axisX = new QCategoryAxis();
-    axisX->setRange(0, 110000);
-    axisX->setTitleText("Количество итераций");
-    axisX->setLabelsAngle(90);
-    axisX->setLabelsFont(fontAxisX);
-    axisX->setLabelsPosition(QCategoryAxis::AxisLabelsPositionOnValue);
-    axisX->append("0", 0);
-
-    QCategoryAxis *axisY = new QCategoryAxis();
-//    axisY->setRange(0, 6000);
-    axisY->setTitleText("Микросекунды (мкс)");
-    axisY->setLabelsFont(fontAxisY);
-    axisY->setLabelsPosition(QCategoryAxis::AxisLabelsPositionOnValue);
-    axisY->append("0", 0);
-
-    QLineSeries *series1 = new QLineSeries();
-    series1->setPointsVisible(true);
-    series1->setPointLabelsVisible(true);
-    series1->setPointLabelsFormat("(@xPoint,@yPoint)");
-    series1->setPointLabelsFont(fontPointLabels);
-    series1->setPointLabelsClipping(false);
-    series1->append(0,0);
-
-    QLineSeries *series2 = new QLineSeries();
-    series2->setPointsVisible(true);
-    series2->setPointLabelsVisible(true);
-    series2->setPointLabelsFormat("(@xPoint,@yPoint)");
-    series2->setPointLabelsFont(fontPointLabels);
-    series2->setPointLabelsClipping(false);
-    series2->append(0,0);
-
-    test(&linkedList, Method::PushBack, axisX, axisY, series1, 100000, 3);
-    test(&arrayList, Method::PushBack, axisX, axisY, series2, 100000, 3);
-
-//    axisY->setRange(0, qMax(max1, max2) + 1000);
-    chart->addAxis(axisX, Qt::AlignBottom);
-    chart->addAxis(axisY, Qt::AlignLeft);
-    chart->addSeries(series1);
-    chart->addSeries(series2);
-
-    QPen pen(QColor(255,0,255));
-    pen.setWidth(2);
-    series1->setPen(pen);
-    series1->setName("1");
-    series1->attachAxis(axisY);
-
-    pen.setColor(QColor(255,0,100));
-    pen.setWidth(2);
-    series2->setPen(pen);
-    series2->setName("2");
-    series2->attachAxis(axisY);
-
-    chart->setAnimationOptions(QChart::AllAnimations);
-
-    ui->chartView->setChart(chart);
-    ui->chartView->setRenderHint(QPainter::Antialiasing);
-
 }
 
 MainWindow::~MainWindow()
@@ -105,6 +18,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::configure()
 {
+    maxIter = 100;
+    colIter = 4;
+    del = 1;
     fontChartTitle.setPixelSize(18);
 
     // config title
@@ -116,19 +32,53 @@ void MainWindow::configure()
     chart->legend()->setAlignment(Qt::AlignBottom);
 
     // config fonts
-    fontAxisX.setPixelSize(10);
-    fontAxisY.setPixelSize(10);
-    fontPointLabels.setPixelSize(9);
+    fontAxis.setPixelSize(10);
+    fontPointLabels.setPixelSize(8);
 }
 
+
+void MainWindow::setChartProps(QChart *chart, QString name)
+{
+    chart->setTitleFont(fontChartTitle);
+    chart->setTitle(name);
+    chart->legend()->setAlignment(Qt::AlignBottom);
+    chart->legend()->setFont(fontAxis);
+    chart->setAnimationOptions(QChart::AllAnimations);
+}
+
+
+void MainWindow::setSeriesProps(QLineSeries *series, QString name, QColor color, bool labelsVisible)
+{
+    series->setPointsVisible(true);
+    series->setPointLabelsVisible(labelsVisible);
+    series->setPointLabelsFormat("(@xPoint,@yPoint)");
+    series->setPointLabelsFont(fontPointLabels);
+    series->setPointLabelsClipping(false);
+    QPen pen(color);
+    pen.setWidth(2);
+    series->setPen(pen);
+    series->setName(name);
+    series->append(0,0);
+}
+
+
+void MainWindow::setAxisProps(QValueAxis *axis, QString name, int interval, int minorTickCount)
+{
+    axis->setLabelsFont(fontAxis);
+    axis->setTickType(QValueAxis::TicksDynamic);
+    axis->setTickAnchor(0);
+    axis->setTitleText(name);
+    axis->setTickInterval(interval);
+    axis->setMinorTickCount(minorTickCount);
+}
+
+
 template<typename T>
-void MainWindow::test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxis *axisY, QLineSeries *series,
-                     int maxIter, int colIter)
+void MainWindow::test(T* list, Method method, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series)
 {
     QElapsedTimer timer;
-    int maxX = 0, maxY = 0;
-    int offset = round(maxIter / colIter);
-    qDebug() << "offset" << offset;
+    int maxX = 0, maxY = axisY->max();
+    int offset = maxIter / colIter;
     int temp = offset;
     int time = 0;
 
@@ -142,12 +92,8 @@ void MainWindow::test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxi
             for(int i = 0; i < temp; i++)
                 list->pushBack(i);
 
-            time = timer.nsecsElapsed() / 1000;
-            axisX->append(QString::number(temp), temp);
-            axisY->append(QString::number(time), time);
+            time = timer.nsecsElapsed() / del;
             series->append(temp, time);
-
-            qDebug() << temp << time;
 
             list->clear();
 
@@ -169,12 +115,8 @@ void MainWindow::test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxi
             for(int i = 0; i < temp; i++)
                 list->pushFront(i);
 
-            time = timer.nsecsElapsed() / 1000;
-            axisX->append(QString::number(temp), temp);
-            axisY->append(QString::number(time), time);
+            time = timer.nsecsElapsed() / del;
             series->append(temp, time);
-
-            qDebug() << temp << time;
 
             list->clear();
 
@@ -188,19 +130,18 @@ void MainWindow::test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxi
         }
         break;
 
-    case Method::RemoveFirst:
+    case Method::DeleteFirst:
         while(temp <= maxIter){
+            for(int i = 0; i < temp; i++)
+                list->pushBack(i);
+
             timer.restart();
 
             for(int i = 0; i < temp; i++)
                 list->removeFirst();
 
-            time = timer.nsecsElapsed() / 1000;
-            axisX->append(QString::number(temp), temp);
-            axisY->append(QString::number(time), time);
+            time = timer.nsecsElapsed() / del;
             series->append(temp, time);
-
-            qDebug() << temp << time;
 
             list->clear();
 
@@ -214,19 +155,18 @@ void MainWindow::test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxi
         }
         break;
 
-    case Method::RemoveLast:
+    case Method::DeleteLast:
         while(temp <= maxIter){
+            for(int i = 0; i < temp; i++)
+                list->pushBack(i);
+
             timer.restart();
 
             for(int i = 0; i < temp; i++)
                 list->removeLast();
 
-            time = timer.nsecsElapsed() / 1000;
-            axisX->append(QString::number(temp), temp);
-            axisY->append(QString::number(time), time);
+            time = timer.nsecsElapsed() / del;
             series->append(temp, time);
-
-            qDebug() << temp << time;
 
             list->clear();
 
@@ -251,12 +191,8 @@ void MainWindow::test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxi
             for(int i = 0; i < temp; i++)
                 list->contains(i);
 
-            time = timer.nsecsElapsed() / 1000;
-            axisX->append(QString::number(temp), temp);
-            axisY->append(QString::number(time), time);
+            time = timer.elapsed();
             series->append(temp, time);
-
-            qDebug() << temp << time;
 
             list->clear();
 
@@ -271,162 +207,334 @@ void MainWindow::test(T* list, Method method, QCategoryAxis *axisX, QCategoryAxi
         break;
     }
 
-    axisX->setRange(0, maxX + 1000);
-    axisY->setRange(0, maxY + 1000);
-
+    axisX->setRange(0, maxX);
+    axisY->setRange(0, maxY);
 }
+
+
+template<typename T>
+void MainWindow::testQt(T *list, Method method, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series)
+{
+    QElapsedTimer timer;
+    int maxX = 0, maxY = axisY->max();
+    int offset = maxIter / colIter;
+    int temp = offset;
+    int time = 0;
+    switch (methods[ui->comboBox->currentText()]) {
+    case Method::PushBack:
+        while(temp <= maxIter){
+            timer.restart();
+
+            for(int i = 0; i < temp; i++)
+                list->push_back(i);
+
+            time = timer.nsecsElapsed() / del;
+            series->append(temp, time);
+
+            list->clear();
+
+            if(temp > maxX)
+                maxX = temp;
+
+            if(time > maxY)
+                maxY = time;
+
+            temp += offset;
+        }
+        break;
+    case Method::PushFront :
+        while(temp <= maxIter){
+            timer.restart();
+
+            for(int i = 0; i < temp; i++)
+                list->push_front(i);
+
+            time = timer.nsecsElapsed() / del;
+            series->append(temp, time);
+
+            list->clear();
+
+            if(temp > maxX)
+                maxX = temp;
+
+            if(time > maxY)
+                maxY = time;
+
+            temp += offset;
+        }
+        break;
+    case Method::DeleteFirst:
+        while(temp <= maxIter){
+            for(int i = 0; i < temp; i++)
+                list->push_back(i);
+
+            timer.restart();
+
+            for(int i = 0; i < temp; i++)
+                list->pop_front();
+
+            time = timer.nsecsElapsed() / del;
+            series->append(temp, time);
+
+            list->clear();
+
+            if(temp > maxX)
+                maxX = temp;
+
+            if(time > maxY)
+                maxY = time;
+
+            temp += offset;
+        }
+        break;
+    case Method::DeleteLast:
+        while(temp <= maxIter){
+            for(int i = 0; i < temp; i++)
+                list->push_back(i);
+
+            timer.restart();
+
+            for(int i = 0; i < temp; i++)
+                list->pop_back();
+
+            time = timer.nsecsElapsed() / del;
+            series->append(temp, time);
+
+            list->clear();
+
+            if(temp > maxX)
+                maxX = temp;
+
+            if(time > maxY)
+                maxY = time;
+
+            temp += offset;
+        }
+        break;
+    case Method::Contains:
+        while(temp <= maxIter){
+            for(int i = 0; i < temp; i++)
+                list->push_back(i);
+
+            timer.restart();
+
+            for(int i = 0; i < temp; i++)
+                list->contains(i);
+
+            time = timer.nsecsElapsed() / del;
+            series->append(temp, time);
+
+            list->clear();
+
+            if(temp > maxX)
+                maxX = temp;
+
+            if(time > maxY)
+                maxY = time;
+
+            temp += offset;
+        }
+        break;
+
+    }
+
+    axisX->setRange(0, maxX);
+    axisY->setRange(0, maxY);
+}
+
 
 void MainWindow::on_pushButton_clicked()
 {
     LinkedList linkedList;
     ArrayList arrayList;
     DoubleLinkedList doubleLinkedList;
-    DequeList dequeList;
+    DequeList dequeList(maxIter);
+
+    QChart *chart = new QChart();
+    QValueAxis *axisX = new QValueAxis();
+    QValueAxis *axisY = new QValueAxis();
+    QLineSeries *series1 = new QLineSeries();
+    QLineSeries *series2 = new QLineSeries();
+    QLineSeries *series3 = new QLineSeries();
+    QLineSeries *series4 = new QLineSeries();
+
+    setChartProps(chart, "Вставка в конец");
+    setSeriesProps(series1, "LinkedList", QColor(255,0,255),false);
+    setSeriesProps(series2, "ArrayList", QColor(0,100,100),false);
+    setSeriesProps(series3, "DoubleLinkedList", QColor(0,0,255),false);
+    setSeriesProps(series4, "DequeList", QColor(255,100,0),false);
+
+    test(&arrayList, methods[ui->comboBox->currentText()],axisX,axisY, series2);
+    test(&doubleLinkedList, methods[ui->comboBox->currentText()],axisX,axisY, series3);
+    test(&dequeList, methods[ui->comboBox->currentText()],axisX,axisY, series4);
+    test(&linkedList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+
+
+    axisX->setRange(0, axisX->max() + axisX->max()*0.1);
+    setAxisProps(axisX, "Количество итераций", maxIter / colIter, 0);
+
+    axisY->setRange(0, axisY->max() + axisY->max()*0.1);
+    setAxisProps(axisY, ui->comboBox_ci->currentText(), axisY->max() / 20, 1);
+
+    chart->addSeries(series1);
+    chart->addSeries(series2);
+    chart->addSeries(series3);
+    chart->addSeries(series4);
+
+    chart->addAxis(axisX, Qt::AlignBottom);
+    chart->addAxis(axisY, Qt::AlignLeft);
+
+    series1->attachAxis(axisX);
+    series1->attachAxis(axisY);
+    series2->attachAxis(axisX);
+    series2->attachAxis(axisY);
+    series3->attachAxis(axisX);
+    series3->attachAxis(axisY);
+    series4->attachAxis(axisX);
+    series4->attachAxis(axisY);
+
+    ui->chartView->setChart(chart);
+    ui->chartView->setRenderHint(QPainter::Antialiasing);
 }
 
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    ui->tabWidget->clear();
-
     LinkedList linkedList;
     DoubleLinkedList doubleLinkedList;
-    QElapsedTimer timer;
-
-
 
     QChart *chart = new QChart();
-    QCategoryAxis *axisX = new QCategoryAxis();
-    QCategoryAxis *axisY = new QCategoryAxis();
+    QValueAxis *axisX = new QValueAxis();
+    QValueAxis *axisY = new QValueAxis();
     QLineSeries *series1 = new QLineSeries();
     QLineSeries *series2 = new QLineSeries();
 
-//    fontChartTitle.setPixelSize(18);
+    setChartProps(chart, "Вставка в конец");
+    setSeriesProps(series1, "LinkedList", QColor(255,0,255),true);
+    setSeriesProps(series2, "DoubleLinkedList", QColor(255,0,100),true);
 
-    // config title
-    chart->setTitleFont(fontChartTitle);
-//    chart->setTitleBrush(Qt::black);
-    chart->setTitle("");
+    test(&linkedList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+    test(&doubleLinkedList, methods[ui->comboBox->currentText()],axisX,axisY, series2);
 
-    // config legend
-    chart->legend()->setAlignment(Qt::AlignBottom);
+    axisX->setRange(0, axisX->max() + axisX->max()*0.1);
+    setAxisProps(axisX, "Количество итераций", maxIter / colIter, 0);
 
-    // config fonts
-    fontAxisX.setPixelSize(10);
-    fontAxisY.setPixelSize(10);
-    fontPointLabels.setPixelSize(9);
+    axisY->setRange(0, axisY->max() + axisY->max()*0.05);
+    setAxisProps(axisY, ui->comboBox_ci->currentText(), (axisY->max() / 20), 1);
 
-//    axisX->setRange(0, 110000);
-    axisX->setTitleText("Количество итераций");
-    axisX->setLabelsAngle(90);
-    axisX->setLabelsFont(fontAxisX);
-    axisX->setLabelsPosition(QCategoryAxis::AxisLabelsPositionOnValue);
-    axisX->append("0", 0);
-
-
-//    axisY->setRange(0, 6000);
-    axisY->setTitleText("Микросекунды (мкс)");
-    axisY->setLabelsFont(fontAxisY);
-    axisY->setLabelsPosition(QCategoryAxis::AxisLabelsPositionOnValue);
-    axisY->append("0", 0);
-
-
-    series1->setPointsVisible(true);
-    series1->setPointLabelsVisible(true);
-    series1->setPointLabelsFormat("(@xPoint,@yPoint)");
-    series1->setPointLabelsFont(fontPointLabels);
-    series1->setPointLabelsClipping(false);
-    series1->append(0,0);
-
-    int maxIter = 100000;
-    int colIter = 4;
-    int offset = round(maxIter / colIter);
-    int temp = offset;
-    int time = 0;
-    int maxX, maxY = 0;
-
-    while(temp <= maxIter){
-        timer.restart();
-
-        for(int i = 0; i < temp; i++)
-            linkedList.pushBack(i);
-
-        time = timer.nsecsElapsed() / 1000;
-        axisX->append(QString::number(temp), temp);
-        axisY->append(QString::number(time), time);
-        qDebug() << temp << time;
-
-        series1->append(temp, time);
-        linkedList.clear();
-
-        if(temp > maxX)
-            maxX = temp;
-
-        if(time > maxY)
-            maxY = time;
-
-        temp += offset;
-    }
-
-
-    series2->setPointsVisible(true);
-    series2->setPointLabelsVisible(true);
-    series2->setPointLabelsFormat("(@xPoint,@yPoint)");
-    series2->setPointLabelsFont(fontPointLabels);
-    series2->setPointLabelsClipping(false);
-    series2->append(0,0);
-
-    temp = offset;
-    time = 0;
-    while(temp <= maxIter){
-        timer.restart();
-
-        for(int i = 0; i < temp; i++)
-            doubleLinkedList.pushBack(i);
-
-        time = timer.nsecsElapsed() / 1000;
-        axisX->append(QString::number(temp), temp);
-        axisY->append(QString::number(time), time);
-        qDebug() << temp << time;
-
-        series2->append(temp, time);
-        doubleLinkedList.clear();
-
-        if(temp > maxX)
-            maxX = temp;
-
-        if(time > maxY)
-            maxY = time;
-
-        temp += offset;
-    }
-
-
-    axisX->setRange(0, maxX + 1000);
-    axisY->setRange(0, maxY + 1000);
-
-    chart->addAxis(axisX, Qt::AlignBottom);
-    chart->addAxis(axisY, Qt::AlignLeft);
     chart->addSeries(series1);
     chart->addSeries(series2);
 
-    QPen pen(QColor(255,0,255));
-    pen.setWidth(2);
-    series1->setPen(pen);
-    series1->setName("1");
-    series1->attachAxis(axisY);
+    chart->addAxis(axisX, Qt::AlignBottom);
+    chart->addAxis(axisY, Qt::AlignLeft);
 
-    pen.setColor(QColor(255,0,100));
-    pen.setWidth(2);
-    series2->setPen(pen);
-    series2->setName("2");
+    series1->attachAxis(axisX);
+    series1->attachAxis(axisY);
+    series2->attachAxis(axisX);
     series2->attachAxis(axisY);
 
-    chart->setAnimationOptions(QChart::AllAnimations);
-
-    Form *form = new Form();
-    form->getChartView()->setChart(chart);
     ui->chartView->setChart(chart);
     ui->chartView->setRenderHint(QPainter::Antialiasing);
+}
+
+
+void MainWindow::on_pushButton_qt_mine_clicked()
+{
+    try {
+        LinkedList linkedList;
+        ArrayList arrayList;
+        DoubleLinkedList doubleLinkedList;
+        DequeList dequeList(maxIter);
+
+        QLinkedList<int> QLinkedList;
+        QList<int> QList;
+
+        QChart *chart = new QChart();
+        QValueAxis *axisX = new QValueAxis();
+        QValueAxis *axisY = new QValueAxis();
+        QLineSeries *series1 = new QLineSeries();
+        QLineSeries *series2 = new QLineSeries();
+
+        QString chartName = "";
+
+        switch (qt[ui->comboBox_qt->currentText()]) {
+        case 0:
+            chartName += "Сравнение QLinkedList";
+            setSeriesProps(series2, "QLinkedList", QColor(255,0,100),false);
+            testQt(&QLinkedList, methods[ui->comboBox->currentText()],axisX,axisY, series2);
+            break;
+        case 1:
+            chartName += "Сравнение QList";
+            setSeriesProps(series2, "QList", QColor(255,0,100),false);
+            testQt(&QList, methods[ui->comboBox->currentText()],axisX,axisY, series2);
+            break;
+        }
+
+        switch (mine[ui->comboBox_mine->currentText()]) {
+        case 0:
+            chartName += " c моим LinkedList";
+            setSeriesProps(series1, "LinkedList", QColor(255,0,255),false);
+            test(&linkedList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+            break;
+        case 1:
+            chartName += " c моим ArrayList";
+            setSeriesProps(series1, "ArrayList", QColor(255,0,255),false);
+            test(&arrayList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+            break;
+        case 2:
+            chartName += " c моим DoubleLinkedList";
+            setSeriesProps(series1, "DoubleLinkedList", QColor(255,0,255),false);
+            test(&doubleLinkedList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+            break;
+        case 3:
+            chartName += " c моим DequeList";
+            setSeriesProps(series1, "DequeList", QColor(255,0,255),false);
+            test(&dequeList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+            break;
+        }
+
+        setChartProps(chart, chartName);
+
+        axisX->setRange(0, axisX->max() + axisX->max()*0.1);
+        setAxisProps(axisX, "Количество итераций", maxIter / colIter, 0);
+
+        axisY->setRange(0, axisY->max() + axisY->max()*0.1);
+        setAxisProps(axisY, ui->comboBox_ci->currentText(), (axisY->max() / 20), 1);
+
+
+        chart->addSeries(series1);
+        chart->addSeries(series2);
+
+        chart->addAxis(axisX, Qt::AlignBottom);
+        chart->addAxis(axisY, Qt::AlignLeft);
+
+        series1->attachAxis(axisX);
+        series1->attachAxis(axisY);
+        series2->attachAxis(axisX);
+        series2->attachAxis(axisY);
+
+        ui->chartView->setChart(chart);
+        ui->chartView->setRenderHint(QPainter::Antialiasing);
+    }  catch (...) {
+        return;
+    }
+}
+
+
+void MainWindow::on_comboBox_maxIter_currentTextChanged(const QString &arg1)
+{
+    maxIter = arg1.toInt();
+}
+
+
+void MainWindow::on_comboBox_colIter_currentTextChanged(const QString &arg1)
+{
+    colIter = arg1.toInt();
+}
+
+
+void MainWindow::on_comboBox_ci_currentTextChanged(const QString &arg1)
+{
+    del = ci[arg1];
 }
 
