@@ -16,6 +16,8 @@
 #include <QObject>
 #include <QtGlobal>
 #include <QLinkedList>
+#include <QList>
+#include <QRandomGenerator>
 #include <cmath>
 
 
@@ -45,6 +47,18 @@ private slots:
     void on_comboBox_colIter_currentTextChanged(const QString &arg1);
 
     void on_comboBox_ci_currentTextChanged(const QString &arg1);
+
+    void on_pushButton_create_clicked();
+
+    void on_comboBox_select_currentTextChanged(const QString &arg1);
+
+    void on_pushButton_add_clicked();
+
+    void on_pushButton_del_clicked();
+
+    void on_pushButton_contains_clicked();
+
+    void on_pushButton_del_list_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -83,16 +97,16 @@ private:
         {"наносекунды", 1},
     };
 
+    QMap<QString, LinkedList*> lists;
+
     void configure();
     void configureSeries();
 
     template<typename T>
-    void test(T* list, Method method, QValueAxis *axisX, QValueAxis *axisY,
-             QLineSeries *series);
+    void test(T* list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series);
 
     template<typename T>
-    void testQt(T* list, Method method, QValueAxis *axisX, QValueAxis *axisY,
-             QLineSeries *series);
+    void testQt(T* list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series);
 
     void setChartProps(QChart *chart, QString name);
     void setSeriesProps(QLineSeries *series, QString name, QColor color, bool labelsVisible);

@@ -2,6 +2,7 @@
 #define LINKEDLIST_H
 
 #include <QDebug>
+#include <QList>
 #include "Node.h"
 
 class LinkedList
@@ -13,9 +14,10 @@ public:
     void pushFront(int d);
     void removeFirst();
     void removeLast();
-    Node* contains(int d);
+    bool contains(int d);
     void print();
     void clear();
+    QList<QString> *toQList();
 
 private:
     Node *first;

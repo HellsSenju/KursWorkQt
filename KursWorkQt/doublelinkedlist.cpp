@@ -64,14 +64,16 @@ void DoubleLinkedList::removeLast()
     tail = node;
 }
 
-Node *DoubleLinkedList::contains(int d)
+bool DoubleLinkedList::contains(int d)
 {
     Node* node = head;
 
-    while(node && node->data != d)
+    while(node){
+        if(node->data == d)
+            return true;
         node = node->next;
-
-    return (node && node->data == d) ? node : nullptr;
+    }
+    return false;
 }
 
 void DoubleLinkedList::print()

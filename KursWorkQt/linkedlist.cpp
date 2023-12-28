@@ -60,13 +60,16 @@ void LinkedList::removeLast()
     last = node;
 }
 
-Node *LinkedList::contains(int d)
+bool LinkedList::contains(int d)
 {
     Node* node = first;
-    while(node && node->data != d)
-        node = node->next;
 
-    return (node && node->data == d) ? node : nullptr;
+    while(node){
+        if(node->data == d)
+            return true;
+        node = node->next;
+    }
+    return false;
 }
 
 void LinkedList::print()
@@ -100,6 +103,17 @@ void LinkedList::clear()
     }
 
     first = nullptr;
+}
+
+QList<QString> *LinkedList::toQList()
+{
+    QList<QString> *list = new QList<QString>();
+    Node *current = first;
+    while(current){
+        list->append(QString::number(current->data));
+        current = current->next;
+    }
+    return list;
 }
 
 bool LinkedList::isEmpty()

@@ -74,7 +74,7 @@ void MainWindow::setAxisProps(QValueAxis *axis, QString name, int interval, int 
 
 
 template<typename T>
-void MainWindow::test(T* list, Method method, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series)
+void MainWindow::test(T* list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series)
 {
     QElapsedTimer timer;
     int maxX = 0, maxY = axisY->max();
@@ -82,7 +82,7 @@ void MainWindow::test(T* list, Method method, QValueAxis *axisX, QValueAxis *axi
     int temp = offset;
     int time = 0;
 
-    switch (method)
+    switch (methods[ui->comboBox->currentText()])
     {
     case Method::PushBack:
 
@@ -213,7 +213,7 @@ void MainWindow::test(T* list, Method method, QValueAxis *axisX, QValueAxis *axi
 
 
 template<typename T>
-void MainWindow::testQt(T *list, Method method, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series)
+void MainWindow::testQt(T *list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series)
 {
     QElapsedTimer timer;
     int maxX = 0, maxY = axisY->max();
@@ -364,10 +364,10 @@ void MainWindow::on_pushButton_clicked()
     setSeriesProps(series3, "DoubleLinkedList", QColor(0,0,255),false);
     setSeriesProps(series4, "DequeList", QColor(255,100,0),false);
 
-    test(&arrayList, methods[ui->comboBox->currentText()],axisX,axisY, series2);
-    test(&doubleLinkedList, methods[ui->comboBox->currentText()],axisX,axisY, series3);
-    test(&dequeList, methods[ui->comboBox->currentText()],axisX,axisY, series4);
-    test(&linkedList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+    test(&arrayList,axisX,axisY, series2);
+    test(&doubleLinkedList, axisX,axisY, series3);
+    test(&dequeList, axisX,axisY, series4);
+    test(&linkedList, axisX,axisY, series1);
 
 
     axisX->setRange(0, axisX->max() + axisX->max()*0.1);
@@ -413,8 +413,8 @@ void MainWindow::on_pushButton_2_clicked()
     setSeriesProps(series1, "LinkedList", QColor(255,0,255),true);
     setSeriesProps(series2, "DoubleLinkedList", QColor(255,0,100),true);
 
-    test(&linkedList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
-    test(&doubleLinkedList, methods[ui->comboBox->currentText()],axisX,axisY, series2);
+    test(&linkedList, axisX,axisY, series1);
+    test(&doubleLinkedList, axisX,axisY, series2);
 
     axisX->setRange(0, axisX->max() + axisX->max()*0.1);
     setAxisProps(axisX, "Количество итераций", maxIter / colIter, 0);
@@ -461,12 +461,12 @@ void MainWindow::on_pushButton_qt_mine_clicked()
         case 0:
             chartName += "Сравнение QLinkedList";
             setSeriesProps(series2, "QLinkedList", QColor(255,0,100),false);
-            testQt(&QLinkedList, methods[ui->comboBox->currentText()],axisX,axisY, series2);
+            testQt(&QLinkedList,axisX,axisY, series2);
             break;
         case 1:
             chartName += "Сравнение QList";
             setSeriesProps(series2, "QList", QColor(255,0,100),false);
-            testQt(&QList, methods[ui->comboBox->currentText()],axisX,axisY, series2);
+            testQt(&QList, axisX,axisY, series2);
             break;
         }
 
@@ -474,22 +474,22 @@ void MainWindow::on_pushButton_qt_mine_clicked()
         case 0:
             chartName += " c моим LinkedList";
             setSeriesProps(series1, "LinkedList", QColor(255,0,255),false);
-            test(&linkedList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+            test(&linkedList,axisX,axisY, series1);
             break;
         case 1:
             chartName += " c моим ArrayList";
             setSeriesProps(series1, "ArrayList", QColor(255,0,255),false);
-            test(&arrayList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+            test(&arrayList,axisX,axisY, series1);
             break;
         case 2:
             chartName += " c моим DoubleLinkedList";
             setSeriesProps(series1, "DoubleLinkedList", QColor(255,0,255),false);
-            test(&doubleLinkedList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+            test(&doubleLinkedList, axisX,axisY, series1);
             break;
         case 3:
             chartName += " c моим DequeList";
             setSeriesProps(series1, "DequeList", QColor(255,0,255),false);
-            test(&dequeList, methods[ui->comboBox->currentText()],axisX,axisY, series1);
+            test(&dequeList, axisX,axisY, series1);
             break;
         }
 
@@ -536,5 +536,93 @@ void MainWindow::on_comboBox_colIter_currentTextChanged(const QString &arg1)
 void MainWindow::on_comboBox_ci_currentTextChanged(const QString &arg1)
 {
     del = ci[arg1];
+}
+
+
+void MainWindow::on_pushButton_create_clicked()
+{
+    ui->listWidget->clear();
+    QString name = ui->lineEdit_list_name->text();
+    LinkedList *list = new LinkedList();
+
+    if(lists.contains(name) || name.isEmpty()){
+        delete list;
+        list = nullptr;
+        return;
+    }
+
+    if(ui->checkBox){
+        int kol = ui->spinBox->value();
+        for(int i = 0; i < kol; i++){
+            int el = QRandomGenerator::global()->generate();
+            list->pushBack(el);
+            ui->listWidget->addItem(QString::number(el));
+        }
+    }
+
+    lists.insert(name, list);
+    ui->comboBox_select->addItem(name);
+
+    ui->lineEdit_list_name->clear();
+    ui->checkBox->setChecked(false);
+    ui->spinBox->setValue(20);
+}
+
+
+void MainWindow::on_comboBox_select_currentTextChanged(const QString &arg1)
+{
+    ui->listWidget->clear();
+    QList<QString> *list = lists[arg1]->toQList();
+
+    for( int i = 0; i < list->count(); i++)
+        ui->listWidget->addItem(list->value(i));
+}
+
+
+void MainWindow::on_pushButton_add_clicked()
+{
+    int el = ui->lineEdit_add->text().toInt();
+    QString list = ui->comboBox_select->currentText();
+    if(ui->radioButton_add_first->isChecked())
+        lists[list]->pushFront(el);
+
+    else if(ui->radioButton_add_last->isChecked())
+        lists[list]->pushBack(el);
+
+    ui->lineEdit_add->clear();
+    on_comboBox_select_currentTextChanged(list);
+}
+
+
+void MainWindow::on_pushButton_del_clicked()
+{
+    QString list = ui->comboBox_select->currentText();
+    if(ui->radioButton_del_first->isChecked())
+        lists[list]->removeFirst();
+
+    else if(ui->radioButton_del_last->isChecked())
+        lists[list]->removeLast();
+
+    on_comboBox_select_currentTextChanged(list);
+}
+
+
+void MainWindow::on_pushButton_contains_clicked()
+{
+    int el = ui->lineEdit_contains->text().toInt();
+    if(lists[ui->comboBox_select->currentText()]->contains(el))
+        ui->label_contains->setText("Элемент найден");
+    else
+        ui->label_contains->setText("Элемент не найден");
+
+    ui->lineEdit_contains->clear();
+}
+
+
+void MainWindow::on_pushButton_del_list_clicked()
+{
+    ui->listWidget->clear();
+    lists.remove(ui->comboBox_select->currentText());
+    ui->comboBox_select->removeItem(ui->comboBox_select->currentIndex());
 }
 
