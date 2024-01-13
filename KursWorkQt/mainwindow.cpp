@@ -6,6 +6,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->comboBox_select->setInsertPolicy(QComboBox::InsertAtTop);
+    ui->lineEdit_add->setValidator(new QIntValidator());
+    ui->lineEdit_contains->setValidator(new QIntValidator());
     chart = new QChart();
     configure();
 }
@@ -542,6 +545,7 @@ void MainWindow::on_comboBox_ci_currentTextChanged(const QString &arg1)
 void MainWindow::on_pushButton_create_clicked()
 {
     ui->listWidget->clear();
+
     QString name = ui->lineEdit_list_name->text();
     LinkedList *list = new LinkedList();
 
@@ -551,7 +555,7 @@ void MainWindow::on_pushButton_create_clicked()
         return;
     }
 
-    if(ui->checkBox){
+    if(ui->checkBox->isChecked()){
         int kol = ui->spinBox->value();
         for(int i = 0; i < kol; i++){
             int el = QRandomGenerator::global()->generate();
@@ -562,6 +566,7 @@ void MainWindow::on_pushButton_create_clicked()
 
     lists.insert(name, list);
     ui->comboBox_select->addItem(name);
+    ui->comboBox_select->setCurrentText(name);
 
     ui->lineEdit_list_name->clear();
     ui->checkBox->setChecked(false);
@@ -581,6 +586,9 @@ void MainWindow::on_comboBox_select_currentTextChanged(const QString &arg1)
 
 void MainWindow::on_pushButton_add_clicked()
 {
+    if(ui->comboBox_select->count() == 0)
+        return;
+
     int el = ui->lineEdit_add->text().toInt();
     QString list = ui->comboBox_select->currentText();
     if(ui->radioButton_add_first->isChecked())
@@ -596,6 +604,9 @@ void MainWindow::on_pushButton_add_clicked()
 
 void MainWindow::on_pushButton_del_clicked()
 {
+    if(ui->comboBox_select->count() == 0)
+        return;
+
     QString list = ui->comboBox_select->currentText();
     if(ui->radioButton_del_first->isChecked())
         lists[list]->removeFirst();
@@ -609,18 +620,22 @@ void MainWindow::on_pushButton_del_clicked()
 
 void MainWindow::on_pushButton_contains_clicked()
 {
+    if(ui->comboBox_select->count() == 0)
+        return;
+
     int el = ui->lineEdit_contains->text().toInt();
     if(lists[ui->comboBox_select->currentText()]->contains(el))
         ui->label_contains->setText("Элемент найден");
     else
         ui->label_contains->setText("Элемент не найден");
-
-    ui->lineEdit_contains->clear();
 }
 
 
 void MainWindow::on_pushButton_del_list_clicked()
 {
+    if(ui->comboBox_select->count() == 0)
+        return;
+
     ui->listWidget->clear();
     lists.remove(ui->comboBox_select->currentText());
     ui->comboBox_select->removeItem(ui->comboBox_select->currentIndex());

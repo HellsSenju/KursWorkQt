@@ -18,6 +18,9 @@
 #include <QLinkedList>
 #include <QList>
 #include <QRandomGenerator>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QValidator>
 #include <cmath>
 
 
