@@ -76,8 +76,7 @@ void MainWindow::setAxisProps(QValueAxis *axis, QString name, int interval, int 
 }
 
 
-template<typename T>
-void MainWindow::test(T* list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series)
+void MainWindow::test(IList *list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series)
 {
     QElapsedTimer timer;
     int maxX = 0, maxY = axisY->max();

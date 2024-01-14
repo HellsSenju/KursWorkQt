@@ -32,13 +32,13 @@ void ArrayList::removeLast()
     remove(list_size - 1);
 }
 
-int ArrayList::contains(int d)
+bool ArrayList::contains(int d)
 {
     for(int i = 0; i < list_size; i++)
         if(data[i] == d)
-            return i;
+            return true;
 
-    return -1;
+    return false;
 }
 
 void ArrayList::print()

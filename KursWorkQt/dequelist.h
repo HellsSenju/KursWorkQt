@@ -2,8 +2,9 @@
 #define DEQUELIST_H
 
 #include "deque.h"
+#include "ilist.h"
 
-class DequeList
+class DequeList: public IList
 {
 public:
     DequeList();

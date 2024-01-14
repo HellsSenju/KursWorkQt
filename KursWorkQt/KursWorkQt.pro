@@ -26,6 +26,7 @@ HEADERS += \
     dequelist.h \
     doublelinkedlist.h \
     form.h \
+    ilist.h \
     linkedlist.h \
     mainwindow.h
 

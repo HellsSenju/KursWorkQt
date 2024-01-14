@@ -3,8 +3,9 @@
 
 #include <QDebug>
 #include <cmath>
+#include "ilist.h"
 
-class ArrayList
+class ArrayList: public IList
 {
 public:
     ArrayList();
@@ -14,7 +15,7 @@ public:
     void pushFront(int d);
     void removeFirst();
     void removeLast();
-    int contains(int d);
+    bool contains(int d);
     void print();
     void clear();
 

@@ -6,6 +6,7 @@
 #include "doublelinkedlist.h"
 #include "dequelist.h"
 #include "form.h"
+#include "ilist.h"
 
 #include <QMainWindow>
 #include <QElapsedTimer>
@@ -105,8 +106,7 @@ private:
     void configure();
     void configureSeries();
 
-    template<typename T>
-    void test(T* list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series);
+    void test(IList* list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series);
 
     template<typename T>
     void testQt(T* list, QValueAxis *axisX, QValueAxis *axisY, QLineSeries *series);

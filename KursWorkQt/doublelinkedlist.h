@@ -3,12 +3,12 @@
 
 #include <QDebug>
 #include "Node.h"
+#include "ilist.h"
 
-class DoubleLinkedList
+class DoubleLinkedList: public IList
 {
 public:
     DoubleLinkedList();
-//    ~DoubleLinkedList();
 
     void pushBack(int d);
     void pushFront(int d);

@@ -4,8 +4,9 @@
 #include <QDebug>
 #include <QList>
 #include "Node.h"
+#include "ilist.h"
 
-class LinkedList
+class LinkedList: public IList
 {
 public:
     LinkedList();
