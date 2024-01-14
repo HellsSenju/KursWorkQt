@@ -10,7 +10,7 @@ class LinkedList: public IList
 {
 public:
     LinkedList();
-//    ~LinkedList();
+
     void pushBack(int d);
     void pushFront(int d);
     void removeFirst();
