@@ -93,10 +93,10 @@ bool ArrayList::isNeedToResize()
 void ArrayList::resize()
 {
     int *newArr = new int[arr_size*arr_size];
-
     for(int i = 0; i < arr_size; i++)
         newArr[i] = data[i];
 
+    free(data);
     data = newArr;
     arr_size *= arr_size;
 }

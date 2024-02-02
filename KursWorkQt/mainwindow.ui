@@ -636,12 +636,12 @@
        </item>
        <item>
         <property name="text">
-         <string>deleteBack</string>
+         <string>deleteLast</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>deleteFront</string>
+         <string>deleteFirst</string>
         </property>
        </item>
        <item>

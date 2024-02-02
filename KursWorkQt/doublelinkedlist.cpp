@@ -7,7 +7,7 @@ DoubleLinkedList::DoubleLinkedList()
 
 void DoubleLinkedList::pushBack(int d)
 {
-    Node* newNode = new Node(d);
+   Node* newNode = new Node(d);
 
    newNode->prev = tail;
    if (tail != nullptr)

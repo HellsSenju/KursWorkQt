@@ -89,7 +89,7 @@ void MainWindow::test(IList *list, QValueAxis *axisX, QValueAxis *axisY, QLineSe
     case Method::PushBack:
 
         while(temp <= maxIter){
-            timer.restart();
+            timer.start();
 
             for(int i = 0; i < temp; i++)
                 list->pushBack(i);
@@ -186,14 +186,14 @@ void MainWindow::test(IList *list, QValueAxis *axisX, QValueAxis *axisY, QLineSe
         while(temp <= maxIter){
 
             for(int i = 0; i < temp; i++)
-                list->pushFront(i);
+                list->pushBack(i);
 
             timer.restart();
 
             for(int i = 0; i < temp; i++)
                 list->contains(i);
 
-            time = timer.elapsed();
+            time = timer.nsecsElapsed() / del;
             series->append(temp, time);
 
             list->clear();
@@ -253,6 +253,7 @@ void MainWindow::testQt(T *list, QValueAxis *axisX, QValueAxis *axisY, QLineSeri
 
             time = timer.nsecsElapsed() / del;
             series->append(temp, time);
+
 
             list->clear();
 
@@ -360,7 +361,27 @@ void MainWindow::on_pushButton_clicked()
     QLineSeries *series3 = new QLineSeries();
     QLineSeries *series4 = new QLineSeries();
 
-    setChartProps(chart, "Вставка в конец");
+    QString chartName;
+    switch (methods[ui->comboBox->currentText()]) {
+    case Method::PushBack:
+        chartName = "Вставка в конец";
+        break;
+    case Method::PushFront:
+        chartName = "Вставка в начало";
+        break;
+    case Method::DeleteFirst:
+        chartName = "Удаление с начала";
+        break;
+    case Method::DeleteLast:
+        chartName = "Удаление с конца";
+        break;
+    case Method::Contains:
+        chartName = "Contains";
+        break;
+    }
+
+    setChartProps(chart, chartName);
+
     setSeriesProps(series1, "LinkedList", QColor(255,0,255),false);
     setSeriesProps(series2, "ArrayList", QColor(0,100,100),false);
     setSeriesProps(series3, "DoubleLinkedList", QColor(0,0,255),false);
@@ -411,7 +432,27 @@ void MainWindow::on_pushButton_2_clicked()
     QLineSeries *series1 = new QLineSeries();
     QLineSeries *series2 = new QLineSeries();
 
-    setChartProps(chart, "Вставка в конец");
+
+    QString chartName;
+    switch (methods[ui->comboBox->currentText()]) {
+    case Method::PushBack:
+        chartName = "Вставка в конец";
+        break;
+    case Method::PushFront:
+        chartName = "Вставка в начало";
+        break;
+    case Method::DeleteFirst:
+        chartName = "Удаление с начала";
+        break;
+    case Method::DeleteLast:
+        chartName = "Удаление с конца";
+        break;
+    case Method::Contains:
+        chartName = "Contains";
+        break;
+    }
+
+    setChartProps(chart, chartName);
     setSeriesProps(series1, "LinkedList", QColor(255,0,255),true);
     setSeriesProps(series2, "DoubleLinkedList", QColor(255,0,100),true);
 
